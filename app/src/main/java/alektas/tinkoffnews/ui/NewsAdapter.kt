@@ -44,7 +44,7 @@ class NewsAdapter(private val itemListener: ItemListener) :
 
         fun bindItem(item: NewsInfo?) {
             preview.text =
-                item?.body ?: itemView.context.getString(R.string.news_post_body_placeholder)
+                item?.headline ?: itemView.context.getString(R.string.news_post_body_placeholder)
             date.text = item?.publicationDate?.toString()
                 ?: itemView.context.getString(R.string.news_post_publication_date_placeholder)
         }
