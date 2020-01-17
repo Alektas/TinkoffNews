@@ -39,11 +39,11 @@ class NewsAdapter(private val itemListener: ItemListener) :
     }
 
     class NewsViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        private val body: TextView = view.news_body
+        private val preview: TextView = view.news_preview
         private val date: TextView = view.news_date
 
         fun bindItem(item: NewsInfo?) {
-            body.text =
+            preview.text =
                 item?.body ?: itemView.context.getString(R.string.news_post_body_placeholder)
             date.text = item?.publicationDate?.toString()
                 ?: itemView.context.getString(R.string.news_post_publication_date_placeholder)
