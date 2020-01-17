@@ -39,6 +39,10 @@ class NewsFragment : Fragment(), ItemListener {
             adapter = newsAdapter
         }
 
+        refresh_btn.setOnClickListener {
+            viewModel.fetchNews()
+        }
+
         viewModel.newsLive.observe(viewLifecycleOwner, Observer {
             newsAdapter.news = it
         })
