@@ -10,7 +10,7 @@ import io.reactivex.Observable
 
 @Dao
 interface NewsDao {
-    @Query("SELECT * FROM news_info")
+    @Query("SELECT * FROM news_info ORDER BY publicationDate DESC")
     fun getNewsSource(): Observable<List<NewsInfo>>
 
     @Query("SELECT * FROM news_info LIMIT 1")
