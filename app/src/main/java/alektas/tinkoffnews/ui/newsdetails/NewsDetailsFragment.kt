@@ -57,7 +57,9 @@ class NewsDetailsFragment : Fragment() {
     }
 
     private fun bind(info: NewsPost) {
+        val headline = info.info?.body
         val content = info.body?.let { HtmlCompat.fromHtml(it, HtmlCompat.FROM_HTML_MODE_LEGACY) }
+        post_headline.text = headline ?: getString(R.string.news_headline_placeholder)
         post_content.text = content ?: getString(R.string.news_post_body_placeholder)
     }
 
