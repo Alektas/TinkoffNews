@@ -43,12 +43,24 @@ class NewsFragment : Fragment(), ItemListener {
             viewModel.fetchNews()
         }
 
-        viewModel.isRefreshCompleted.observe(viewLifecycleOwner, Observer {
-            swipe_refresh.isRefreshing = !it
-        })
-
         viewModel.newsLive.observe(viewLifecycleOwner, Observer {
             newsAdapter.news = it
+        })
+
+        viewModel.loadingState.observe(viewLifecycleOwner, Observer {
+            when (it.state) {
+                ProcessState.STARTED -> {
+                    post_error.visibility = View.INVISIBLE
+                    swipe_refresh.isRefreshing = true
+                }
+                ProcessState.SUCCESS -> swipe_refresh.isRefreshing = false
+                ProcessState.ERROR -> {
+                    swipe_refresh.isRefreshing = false
+                    if (newsAdapter.news.isEmpty()) {
+                        post_error.visibility = View.VISIBLE
+                    }
+                }
+            }
         })
     }
 

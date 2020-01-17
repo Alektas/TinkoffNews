@@ -1,6 +1,7 @@
 package alektas.tinkoffnews.data
 
 import alektas.tinkoffnews.App
+import alektas.tinkoffnews.BuildConfig
 import alektas.tinkoffnews.data.entities.NewsInfo
 import alektas.tinkoffnews.data.entities.NewsPost
 import alektas.tinkoffnews.data.local.NewsDao
@@ -9,6 +10,7 @@ import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
+import io.reactivex.subjects.BehaviorSubject
 import javax.inject.Inject
 
 class NewsRepository: Repository {
@@ -16,12 +18,14 @@ class NewsRepository: Repository {
     lateinit var remoteSource: DataSource
     @Inject
     lateinit var newsDao: NewsDao
-    private val newsSource: Observable<List<NewsInfo>>
+    private val newsSource = BehaviorSubject.create<List<NewsInfo>>()
     private var disposable: Disposable? = null
 
     init {
         App.appComponent.injects(this)
-        newsSource = newsDao.getNewsSource()
+        newsDao.getNewsSource()
+            .subscribeOn(Schedulers.io())
+            .subscribe(newsSource)
 
         newsDao.getAnyInfo()
             .subscribeOn(Schedulers.io())
@@ -40,18 +44,23 @@ class NewsRepository: Repository {
     }
 
     override fun fetchNews() {
+        if (BuildConfig.DEBUG) println("[Get News] Starting")
         disposable?.dispose()
         disposable = remoteSource.fetchNews()
             .subscribeOn(Schedulers.io())
             .subscribe({
                 newsDao.insert(it)
             }, {
+                newsSource.value?.let { n -> newsSource.onNext(n) }
                 it.printStackTrace()
             })
     }
 
-    override fun fetchNewsPost(id: Long): Single<NewsPost> {
-        return remoteSource.fetchPost(id)
+    override fun getNewsPost(id: Long): Single<NewsPost> {
+        if (BuildConfig.DEBUG) println("[Get Post] Starting")
+        return newsDao.getPost(id)
+            .switchIfEmpty(remoteSource.fetchPost(id).doOnSuccess { newsDao.insert(it) })
+            .subscribeOn(Schedulers.io())
     }
 
 }

@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import alektas.tinkoffnews.R
 import alektas.tinkoffnews.data.entities.NewsPost
 import alektas.tinkoffnews.ui.NewsFragment
+import alektas.tinkoffnews.ui.ProcessState
 import android.content.Intent
 import android.view.MenuItem
 import androidx.core.text.HtmlCompat
@@ -54,10 +55,21 @@ class NewsDetailsFragment : Fragment() {
         newsId?.let { viewModel.fetchPost(it) }
 
         viewModel.newsPost.observe(viewLifecycleOwner, Observer { bind(it) })
+
+        viewModel.loadingState.observe(viewLifecycleOwner, Observer {
+            when (it.state) {
+                ProcessState.STARTED -> progress_bar.visibility = View.VISIBLE
+                ProcessState.SUCCESS -> progress_bar.visibility = View.INVISIBLE
+                ProcessState.ERROR -> {
+                    progress_bar.visibility = View.INVISIBLE
+                    post_error.visibility = View.VISIBLE
+                }
+            }
+        })
     }
 
     private fun bind(info: NewsPost) {
-        val headline = info.info?.body
+        val headline = info.info?.headline
         val content = info.body?.let { HtmlCompat.fromHtml(it, HtmlCompat.FROM_HTML_MODE_LEGACY) }
         post_headline.text = headline ?: getString(R.string.news_headline_placeholder)
         post_content.text = content ?: getString(R.string.news_post_body_placeholder)

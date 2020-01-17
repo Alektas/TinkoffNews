@@ -8,5 +8,5 @@ import io.reactivex.Single
 interface Repository {
     fun observeNews(): Observable<List<NewsInfo>>
     fun fetchNews()
-    fun fetchNewsPost(id: Long): Single<NewsPost>
+    fun getNewsPost(id: Long): Single<NewsPost>
 }

@@ -21,7 +21,7 @@ class NewsInfo {
     var name: String? = null
     @SerializedName("text")
     @Expose
-    var body: String? = null
+    var headline: String? = null
     @TypeConverters(DateConverter::class)
     @SerializedName("publicationDate")
     @Expose
