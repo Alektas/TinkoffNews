@@ -39,9 +39,13 @@ class NewsFragment : Fragment(), ItemListener {
             adapter = newsAdapter
         }
 
-        refresh_btn.setOnClickListener {
+        swipe_refresh.setOnRefreshListener {
             viewModel.fetchNews()
         }
+
+        viewModel.isRefreshCompleted.observe(viewLifecycleOwner, Observer {
+            swipe_refresh.isRefreshing = !it
+        })
 
         viewModel.newsLive.observe(viewLifecycleOwner, Observer {
             newsAdapter.news = it

@@ -16,6 +16,7 @@ class NewsViewModel : ViewModel() {
     lateinit var repository: Repository
     private var disposable: Disposable? = null
     val newsLive = MutableLiveData<List<NewsInfo>>()
+    val isRefreshCompleted = MutableLiveData<Boolean>()
 
     init {
         App.appComponent.injects(this)
@@ -25,6 +26,7 @@ class NewsViewModel : ViewModel() {
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeWith(object : DisposableObserver<List<NewsInfo>>() {
                 override fun onNext(news: List<NewsInfo>) {
+                    isRefreshCompleted.value = true
                     newsLive.value = news
                 }
 
@@ -39,6 +41,7 @@ class NewsViewModel : ViewModel() {
     }
 
     fun fetchNews() {
+        isRefreshCompleted.value = false
         repository.fetchNews()
     }
 
