@@ -21,7 +21,7 @@ class NewsDetailsViewModel : ViewModel() {
     }
 
     fun fetchPost(id: Long)  {
-        disposable = repository.fetchNewsPost(id)
+        disposable = repository.getNewsPost(id)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({
