@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="@dimen/padding_bottom_page">
+
+        <TextView
+            android:id="@+id/post_headline"
+            style="@style/TextAppearance.MaterialComponents.Headline5"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_horiz_item_details_text"
+            android:layout_marginTop="@dimen/margin_top_item_details_text"
+            android:layout_marginEnd="@dimen/margin_horiz_item_details_text"
+            android:text="@string/news_headline_placeholder"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/post_content"
+            style="@style/TextAppearance.MaterialComponents.Body1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_horiz_item_details_text"
+            android:layout_marginEnd="@dimen/margin_horiz_item_details_text"
+            android:layout_marginTop="@dimen/margin_top_item_details_description"
+            android:text="@string/news_post_body_placeholder"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/post_headline"
+            tools:text="@string/lorem"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>
