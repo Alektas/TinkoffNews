@@ -12,10 +12,10 @@ class NewsPost {
     var body: String? = null
     @SerializedName("creationDate")
     @Expose
-    val creationDate: Date? = null
+    var creationDate: Date? = null
     @SerializedName("lastModificationDate")
     @Expose
-    val lastModificationDate: Date? = null
+    var lastModificationDate: Date? = null
 
     override fun toString(): String {
         return "NewsPost(id=${info?.id}, name=${info?.name})"

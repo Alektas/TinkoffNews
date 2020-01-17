@@ -11,11 +11,10 @@ import alektas.tinkoffnews.R
 import alektas.tinkoffnews.data.entities.NewsPost
 import alektas.tinkoffnews.ui.NewsFragment
 import android.content.Intent
-import android.text.Html
 import android.view.MenuItem
 import androidx.core.text.HtmlCompat
 import androidx.lifecycle.Observer
-import kotlinx.android.synthetic.main.item_news.*
+import kotlinx.android.synthetic.main.news_details_fragment.*
 
 private const val ARG_NEWS_ID = "param1"
 
@@ -59,7 +58,7 @@ class NewsDetailsFragment : Fragment() {
 
     private fun bind(info: NewsPost) {
         val content = info.body?.let { HtmlCompat.fromHtml(it, HtmlCompat.FROM_HTML_MODE_LEGACY) }
-        news_body.text = content ?: getString(R.string.news_post_body_placeholder)
+        post_content.text = content ?: getString(R.string.news_post_body_placeholder)
     }
 
     companion object {

@@ -7,6 +7,7 @@ import alektas.tinkoffnews.data.local.NewsDao
 import alektas.tinkoffnews.domain.Repository
 import io.reactivex.Observable
 import io.reactivex.Single
+import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
@@ -16,10 +17,22 @@ class NewsRepository: Repository {
     @Inject
     lateinit var newsDao: NewsDao
     private val newsSource: Observable<List<NewsInfo>>
+    private var disposable: Disposable? = null
 
     init {
         App.appComponent.injects(this)
         newsSource = newsDao.getNewsSource()
+
+        newsDao.getAnyInfo()
+            .subscribeOn(Schedulers.io())
+            .subscribe({
+                if (it == null) fetchNews()
+            }, {
+                fetchNews()
+            }, {
+                fetchNews()
+            })
+
     }
 
     override fun observeNews(): Observable<List<NewsInfo>> {
@@ -27,10 +40,10 @@ class NewsRepository: Repository {
     }
 
     override fun fetchNews() {
-        remoteSource.fetchNews()
+        disposable?.dispose()
+        disposable = remoteSource.fetchNews()
             .subscribeOn(Schedulers.io())
             .subscribe({
-//                newsSource.onNext(it)
                 newsDao.insert(it)
             }, {
                 it.printStackTrace()

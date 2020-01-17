@@ -1,8 +1,10 @@
 package alektas.tinkoffnews.data.entities
 
+import alektas.tinkoffnews.data.converters.DateConverter
 import androidx.room.Entity
 import androidx.room.Index
 import androidx.room.PrimaryKey
+import androidx.room.TypeConverters
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 
@@ -20,9 +22,10 @@ class NewsInfo {
     @SerializedName("text")
     @Expose
     var body: String? = null
+    @TypeConverters(DateConverter::class)
     @SerializedName("publicationDate")
     @Expose
-    val publicationDate: Date? = null
+    var publicationDate: Date? = null
 
     override fun toString(): String {
         return "NewsInfo(id=$id, name=$name, publicationDate=$publicationDate)"

@@ -20,8 +20,6 @@ class NewsViewModel : ViewModel() {
     init {
         App.appComponent.injects(this)
 
-        fetchNews()
-
         disposable = repository.observeNews()
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())

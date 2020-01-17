@@ -6,5 +6,5 @@ import com.google.gson.annotations.SerializedName
 class Date {
     @SerializedName("milliseconds")
     @Expose
-    val milliseconds: Long? = null
+    var milliseconds: Long? = null
 }
