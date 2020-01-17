@@ -21,6 +21,19 @@
             android:layout_marginTop="16dp"
             android:layout_marginEnd="16dp"
             android:maxLines="4"
-            android:text="@string/news_post_body_placeholder" />
+            android:text="@string/news_post_body_placeholder"
+            android:layout_alignParentTop="true"
+            android:layout_above="@id/news_date"/>
+
+        <TextView
+            android:id="@+id/news_date"
+            style="@style/TextAppearance.MaterialComponents.Body1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="true"
+            android:text="@string/news_post_publication_date_placeholder" />
     </RelativeLayout>
 </androidx.cardview.widget.CardView>
