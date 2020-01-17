@@ -16,32 +16,34 @@ class NewsViewModel : ViewModel() {
     lateinit var repository: Repository
     private var disposable: Disposable? = null
     val newsLive = MutableLiveData<List<NewsInfo>>()
-    val isRefreshCompleted = MutableLiveData<Boolean>()
+    var loadingState = MutableLiveData<ProcessState>()
 
     init {
         App.appComponent.injects(this)
 
+        loadingState.value = ProcessState(ProcessState.STARTED)
         disposable = repository.observeNews()
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeWith(object : DisposableObserver<List<NewsInfo>>() {
                 override fun onNext(news: List<NewsInfo>) {
-                    isRefreshCompleted.value = true
                     newsLive.value = news
+                    loadingState.value = ProcessState(ProcessState.SUCCESS)
                 }
 
                 override fun onComplete() {
-
+                    loadingState.value = ProcessState(ProcessState.SUCCESS)
                 }
 
                 override fun onError(e: Throwable) {
+                    loadingState.value = ProcessState(ProcessState.ERROR)
                     e.printStackTrace()
                 }
             })
     }
 
     fun fetchNews() {
-        isRefreshCompleted.value = false
+        loadingState.value = ProcessState(ProcessState.STARTED)
         repository.fetchNews()
     }
 

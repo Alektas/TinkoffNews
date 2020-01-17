@@ -15,7 +15,7 @@ interface NewsDao {
     fun getNewsSource(): Observable<List<NewsInfo>>
 
     @Query("SELECT * FROM news_info LIMIT 1")
-    fun getAnyInfo(): Maybe<NewsInfo?>
+    fun getAnyInfo(): Maybe<NewsInfo>
 
     @Query("SELECT * FROM news_posts WHERE id = :id LIMIT 1")
     fun getPost(id: Long): Maybe<NewsPost>

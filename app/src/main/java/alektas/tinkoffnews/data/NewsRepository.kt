@@ -10,6 +10,7 @@ import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
+import io.reactivex.subjects.BehaviorSubject
 import javax.inject.Inject
 
 class NewsRepository: Repository {
@@ -17,12 +18,14 @@ class NewsRepository: Repository {
     lateinit var remoteSource: DataSource
     @Inject
     lateinit var newsDao: NewsDao
-    private val newsSource: Observable<List<NewsInfo>>
+    private val newsSource = BehaviorSubject.create<List<NewsInfo>>()
     private var disposable: Disposable? = null
 
     init {
         App.appComponent.injects(this)
-        newsSource = newsDao.getNewsSource()
+        newsDao.getNewsSource()
+            .subscribeOn(Schedulers.io())
+            .subscribe(newsSource)
 
         newsDao.getAnyInfo()
             .subscribeOn(Schedulers.io())
@@ -48,6 +51,7 @@ class NewsRepository: Repository {
             .subscribe({
                 newsDao.insert(it)
             }, {
+                newsSource.value?.let { n -> newsSource.onNext(n) }
                 it.printStackTrace()
             })
     }
